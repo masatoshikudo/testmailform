@@ -1,7 +1,8 @@
+// @ts-nocheck
 import { serve } from "https://deno.land/std@0.168.0/http/server.ts";
 
 const MAILCHIMP_API_KEY = Deno.env.get("MAILCHIMP_API_KEY") || "";
-const MAILCHIMP_SERVER = Deno.env.get("MAILCHIMP_SERVER") || ""; // e.g., us1
+const MAILCHIMP_SERVER_PREFIX = Deno.env.get("MAILCHIMP_SERVER_PREFIX") || ""; // ← 正解✨
 const MAILCHIMP_LIST_ID = Deno.env.get("MAILCHIMP_LIST_ID") || "";
 
 const corsHeaders = {
@@ -20,7 +21,7 @@ serve(async (req) => {
   }
 
   try {
-    if (!MAILCHIMP_API_KEY || !MAILCHIMP_SERVER || !MAILCHIMP_LIST_ID) {
+    if (!MAILCHIMP_API_KEY || !MAILCHIMP_SERVER_PREFIX || !MAILCHIMP_LIST_ID) {
       throw new Error("Missing Mailchimp configuration");
     }
 
@@ -63,7 +64,7 @@ serve(async (req) => {
 });
 
 async function subscribeToMailchimp(email: string, firstName: string) {
-  const MAILCHIMP_URL = `https://${MAILCHIMP_SERVER}.api.mailchimp.com/3.0/lists/${MAILCHIMP_LIST_ID}/members`;
+  const MAILCHIMP_URL = `https://${MAILCHIMP_SERVER_PREFIX}.api.mailchimp.com/3.0/lists/${MAILCHIMP_LIST_ID}/members`;
   
   const data = {
     email_address: email,
