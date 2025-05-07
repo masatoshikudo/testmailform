@@ -20,7 +20,7 @@ export const saveUserToSupabase = async (user: User) => {
   try {
     const { data, error } = await supabase
       .from(supabaseTable)
-      .insert([user])
+      .insert([{ email: user.email, first_name: user.firstName ?? '' }])
       .select();
 
     if (error) {
